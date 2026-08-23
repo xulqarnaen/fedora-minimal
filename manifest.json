@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.ibr.cava",
+  "name": "CAVA Visualizer",
+  "version": "1.0.0",
+  "author": "ibr",
+  "license": "MIT",
+  "description": "Live CAVA audio spectrum visualizer for the Omarchy bar",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "CAVA Visualizer",
+    "description": "Live audio spectrum visualizer",
+    "category": "Media",
+    "defaultSection": "left",
+    "allowMultiple": false
+  }
+}
