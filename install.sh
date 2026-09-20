@@ -172,6 +172,13 @@ PACKAGES=(
 
     mesa-dri-drivers
     mesa-vulkan-drivers
+    intel-media-driver
+
+    pipewire
+    pipewire-pulseaudio
+    pipewire-alsa
+    wireplumber
+    cava
 
     fish
     foot
@@ -191,8 +198,6 @@ PACKAGES=(
     unrar
     unzip
     tar
-
-    cava
 
     ffmpegthumbnailer
 
