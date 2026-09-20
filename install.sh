@@ -496,28 +496,28 @@ install_jetbrains_mono_nerd_font() {
     echo "--- JetBrains Mono Nerd Font Setup ---"
 
     local font_version="v3.5.1"
-    local font_dir="/usr/local/share/fonts/JetBrainsMonoNerdFontMono"
+    local font_dir="/usr/local/share/fonts/JetBrainsMonoNerdFont"
     local version_file="$font_dir/.version"
     local tmp_dir
     local archive
 
     if [[ -f "$version_file" && "$(<"$version_file")" == "$font_version" ]]; then
-        echo "JetBrains Mono Nerd Font Mono ${font_version} is already installed."
+        echo "JetBrains Mono Nerd Font ${font_version} is already installed."
         return 0
     fi
 
     tmp_dir="$(mktemp -d)"
     archive="$tmp_dir/JetBrainsMono.tar.xz"
 
-  if ! curl -fL --retry 3 --retry-delay 2 \
-    -o "$archive" \
-    "https://github.com/ryanoasis/nerd-fonts/releases/download/${font_version}/JetBrainsMono.tar.xz" \
-    || ! tar -xJf "$archive" -C "$tmp_dir" \
-    || ! install -d -m 0755 "$font_dir" \
-    || ! find "$tmp_dir" -type f -name 'JetBrainsMonoNerdFontMono-*.ttf' \
-        -exec install -m 0644 {} "$font_dir/" \; \
-    || ! fc-cache -f "$font_dir" >/dev/null 2>&1 \
-    || ! printf '%s\n' "$font_version" > "$version_file"; then
+    if ! curl -fL --retry 3 --retry-delay 2 \
+        -o "$archive" \
+        "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/JetBrainsMono.tar.xz" \
+        || ! tar -xJf "$archive" -C "$tmp_dir" \
+        || ! install -d -m 0755 "$font_dir" \
+        || ! find "$tmp_dir" -type f -name 'JetBrainsMonoNerdFont-*.ttf' \
+            -exec install -m 0644 {} "$font_dir/" \; \
+        || ! fc-cache -f "$font_dir" >/dev/null 2>&1 \
+        || ! printf '%s\n' "$font_version" > "$version_file"; then
 
         rm -rf "$tmp_dir"
         echo "${RED}ERROR: JetBrains Mono Nerd Font setup failed.${ALL_OFF}" >&2
@@ -525,13 +525,12 @@ install_jetbrains_mono_nerd_font() {
     fi
 
     rm -rf "$tmp_dir"
-    echo "JetBrains Mono Nerd Font Mono installed system-wide."
+    echo "JetBrains Mono Nerd Font installed system-wide."
 }
 
 if ! install_jetbrains_mono_nerd_font; then
     exit 1
 fi
-
 # ============================================================
 # User Environment Defaults
 # ============================================================
