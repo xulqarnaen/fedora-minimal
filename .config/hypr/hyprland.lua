@@ -1,19 +1,10 @@
 require("monitors")
-require("autostart")
-require("env")
-require("looknfeel")
-require("animations")
-require("rules.windows")
+require("session")
+require("appearance")
 require("input")
-require("misc")
+require("rules")
+require("programs")
+require("bindings")
 
-require("bindings.applications")
-require("bindings.webapps")
-require("bindings.windows")
-require("bindings.workspaces")
-require("bindings.fullscreen")
-require("bindings.media")
-require("bindings.noctalia")
-
--- For Noctalia Color templates
+-- Noctalia generated theme
 require("noctalia").apply_theme()

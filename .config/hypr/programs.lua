@@ -3,9 +3,9 @@
 ---------------------
 
 return {
-    terminal    = "foot",
+    terminal = "foot",
     fileManager = "thunar",
-    browser     = "brave-origin",
-    noctalia    = "noctalia msg ",
-    webapp      = "webapp",
+    browser = "brave-origin",
+    noctalia = "noctalia msg ",
+    webapp = "webapp",
 }

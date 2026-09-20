@@ -3,9 +3,9 @@
 ------------------
 
 hl.monitor({
-    output   = "",
-    mode     = "preferred",
+    output = "",
+    mode = "preferred",
     position = "auto",
-    scale    = "auto",
+    scale = "auto",
 })
 
