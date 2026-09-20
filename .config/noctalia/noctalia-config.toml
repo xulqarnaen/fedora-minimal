@@ -6,7 +6,7 @@ enable_sounds = true
 border = "secondary"
 border_width = 2.0
 concave_edge_corners = false
-end = [ "tray", "network", "bluetooth", "volume", "brightness", "battery", "widget" ]
+end = [ "tray", "network", "bluetooth", "volume", "brightness", "battery" ]
 font_family = "JetBrainsMono Nerd Font"
 hover_highlight = false
 margin_edge = 6
@@ -103,7 +103,7 @@ popup_shadows = false
 telemetry_enabled = true
 
     [shell.animation]
-    enabled = false
+    enabled = true
 
     [shell.launcher]
     categories = false
@@ -112,10 +112,10 @@ telemetry_enabled = true
 
     [shell.panel]
     borders = false
-    clipboard_placement = "attached"
-    clipboard_position = "auto"
+    clipboard_placement = "floating"
+    clipboard_position = "center"
     control_center_placement = "floating"
-    open_near_click_clipboard = true
+    open_near_click_clipboard = false
     open_near_click_control_center = true
     session_placement = "floating"
     wallpaper_placement = "floating"
@@ -136,13 +136,13 @@ wallpaper_scheme = "m3-content"
 directory = "~/Pictures/Wallpapers"
 
     [wallpaper.default]
-    path = "/home/ibr/Pictures/Wallpapers/BG1.png"
+    path = "/home/ibr/Pictures/Wallpapers/wallhaven-5yd6d5_1920x1080.png"
 
     [wallpaper.last]
-    path = "/home/ibr/Pictures/Wallpapers/BG1.png"
+    path = "/home/ibr/Pictures/Wallpapers/wallhaven-5yd6d5_1920x1080.png"
 
     [wallpaper.monitors.eDP-1]
-    path = "/home/ibr/Pictures/Wallpapers/BG1.png"
+    path = "/home/ibr/Pictures/Wallpapers/wallhaven-5yd6d5_1920x1080.png"
 
 [widget.battery]
 show_label = false
@@ -169,9 +169,6 @@ anchor = true
 
 [widget.volume]
 show_label = false
-
-[widget.widget]
-type = "oldirtty/color_picker:widget"
 
 [widget.workspaces]
 style = "minimal"

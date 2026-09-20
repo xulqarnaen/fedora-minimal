@@ -1,0 +1,1 @@
+/var/lib/noctalia-greeter(/.*)?    system_u:object_r:noctalia_greeter_var_lib_t:s0
