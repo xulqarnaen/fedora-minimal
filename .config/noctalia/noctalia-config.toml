@@ -1,0 +1,155 @@
+[audio]
+enable_overdrive = true
+enable_sounds = true
+
+[bar.default]
+border = "primary"
+border_width = 2.0
+concave_edge_corners = false
+end = [ "tray", "network", "bluetooth", "volume", "brightness", "battery" ]
+font_family = "JetBrainsMono Nerd Font"
+hover_highlight = false
+margin_edge = 6
+margin_ends = 6
+panel_overlap = 0
+position = "bottom"
+radius = 0
+start = [ "launcher", "workspaces", "media" ]
+
+[battery]
+warning_threshold = 20
+
+[control_center]
+sidebar_section = "none"
+
+[desktop_widgets]
+enabled = false
+
+[location]
+address = "Srinagar"
+
+[lockscreen]
+blur_intensity = 0.0
+fingerprint = false
+tint_intensity = 0.0
+
+[lockscreen_widgets]
+schema_version = 2
+widget_order = [ "lockscreen-login-box@eDP-1" ]
+
+    [lockscreen_widgets.grid]
+    cell_size = 24
+    major_interval = 4
+    visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
+    box_height = 70.0
+    box_width = 400.0
+    cx = 683.0
+    cy = 419.0
+    output = "eDP-1"
+    placement_height = 768.0
+    placement_width = 1366.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "compact"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+[plugins]
+enabled = []
+
+[shell]
+avatar_path = "/home/ibr/Pictures/Wallpapers/wallhaven-rqyqkj_1920x1080.png"
+button_borders = false
+card_borders = false
+corner_radius_scale = 0.0
+font_family = "JetBrainsMono Nerd Font"
+input_borders = false
+password_style = "random"
+polkit_agent = true
+popup_borders = false
+popup_shadows = false
+
+    [shell.animation]
+    enabled = false
+
+    [shell.launcher]
+    categories = false
+    show_icons = false
+
+    [shell.panel]
+    borders = false
+    clipboard_placement = "attached"
+    clipboard_position = "auto"
+    control_center_placement = "floating"
+    open_near_click_clipboard = true
+    open_near_click_control_center = true
+    session_placement = "floating"
+    wallpaper_placement = "floating"
+
+[theme]
+builtin = "Rosé Pine"
+community_palette = "Kanagawa Kasumi"
+custom_palette = "Solitudessss"
+mode = "dark"
+source = "custom"
+wallpaper_scheme = "m3-content"
+
+    [theme.templates]
+    builtin_ids = [ "btop", "cava", "foot", "gtk3", "gtk4", "hyprland", "kcolorscheme", "kitty", "qt", "starship" ]
+    community_ids = [ "pywalfox", "telegram", "fastfetch" ]
+
+[wallpaper]
+directory = "~/Pictures/Wallpapers"
+
+    [wallpaper.default]
+    path = "/home/ibr/Pictures/Wallpapers/wallhaven-rqyqkj_1920x1080.png"
+
+    [wallpaper.last]
+    path = "/home/ibr/Pictures/Wallpapers/wallhaven-rqyqkj_1920x1080.png"
+
+    [wallpaper.monitors.eDP-1]
+    path = "/home/ibr/Pictures/Wallpapers/wallhaven-rqyqkj_1920x1080.png"
+
+[widget.battery]
+show_label = false
+
+[widget.brightness]
+show_label = false
+
+[widget.clock]
+format = "%I:%M %p - %A, %B %d"
+
+[widget.launcher]
+glyph = "brand-bumble"
+
+[widget.media]
+hide_album_art = true
+hide_when_no_media = true
+title_scroll = "on_hover"
+
+[widget.network]
+show_label = false
+
+[widget.session]
+anchor = true
+
+[widget.volume]
+show_label = false
+
+[widget.workspaces]
+style = "minimal"

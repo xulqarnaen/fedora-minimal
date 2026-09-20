@@ -1,0 +1,32 @@
+[theme.colors]
+# Core surface and text colors
+background = "#0f0f0f"
+foreground = "#f4decd"
+
+[theme.colors.surface]
+default = "#131414"
+container = "#1D1F1E"
+
+[theme.colors.on_surface]
+default = "#f4decd"
+
+# ANSI / Accent mapping derived from daccfiles
+[theme.colors.ansi]
+black   = "#0f0f0f"
+red     = "#f16e65"
+green   = "#7ec97e"
+yellow  = "#ef934d"
+blue    = "#71b4d6"
+magenta = "#e28dc6"
+cyan    = "#7ec9a3"
+white   = "#d9cdb5"
+
+[theme.colors.bright]
+black   = "#3b403c"
+red     = "#ef968f"
+green   = "#a4daa4"
+yellow  = "#efbe71"
+blue    = "#b0d4e8"
+magenta = "#ebadd6"
+cyan    = "#abd4bf"
+white   = "#F9EEE5"
