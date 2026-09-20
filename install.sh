@@ -189,6 +189,7 @@ PACKAGES=(
 
     unrar
     unzip
+    tar
 
     cava
 
@@ -507,15 +508,15 @@ install_jetbrains_mono_nerd_font() {
     tmp_dir="$(mktemp -d)"
     archive="$tmp_dir/JetBrainsMono.tar.xz"
 
-    if ! curl -fL --retry 3 --retry-delay 2 \
-        -o "$archive" \
-        "https://github.com/ryanoasis/nerd-fonts/releases/download/${font_version}/JetBrainsMono.tar.xz" \
-        || ! tar -xJf "$archive" -C "$tmp_dir" \
-        || ! install -d -m 0755 "$font_dir" \
-        || ! find "$tmp_dir" -type f -name 'JetBrainsMonoNerdFontMono-*.ttf' \
-            -exec install -m 0644 {} "$font_dir/" + \
-        || ! fc-cache -f "$font_dir" >/dev/null 2>&1 \
-        || ! printf '%s\n' "$font_version" > "$version_file"; then
+  if ! curl -fL --retry 3 --retry-delay 2 \
+    -o "$archive" \
+    "https://github.com/ryanoasis/nerd-fonts/releases/download/${font_version}/JetBrainsMono.tar.xz" \
+    || ! tar -xJf "$archive" -C "$tmp_dir" \
+    || ! install -d -m 0755 "$font_dir" \
+    || ! find "$tmp_dir" -type f -name 'JetBrainsMonoNerdFontMono-*.ttf' \
+        -exec install -m 0644 {} "$font_dir/" \; \
+    || ! fc-cache -f "$font_dir" >/dev/null 2>&1 \
+    || ! printf '%s\n' "$font_version" > "$version_file"; then
 
         rm -rf "$tmp_dir"
         echo "${RED}ERROR: JetBrains Mono Nerd Font setup failed.${ALL_OFF}" >&2

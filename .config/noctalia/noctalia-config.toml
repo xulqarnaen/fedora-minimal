@@ -26,7 +26,7 @@ sidebar_section = "none"
 enabled = false
 
 [location]
-address = "Srinagar"
+address = ""
 
 [lockscreen]
 blur_intensity = 0.0
@@ -73,7 +73,7 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
 enabled = []
 
 [shell]
-avatar_path = "/home/ibr/Pictures/Wallpapers/wallhaven-rqyqkj_1920x1080.png"
+avatar_path = ""
 button_borders = false
 card_borders = false
 corner_radius_scale = 0.0
@@ -117,13 +117,13 @@ wallpaper_scheme = "m3-content"
 directory = "~/Pictures/Wallpapers"
 
     [wallpaper.default]
-    path = "/home/ibr/Pictures/Wallpapers/wallhaven-rqyqkj_1920x1080.png"
+    path = "~/Pictures/Wallpapers"
 
     [wallpaper.last]
-    path = "/home/ibr/Pictures/Wallpapers/wallhaven-rqyqkj_1920x1080.png"
+    path = ""
 
     [wallpaper.monitors.eDP-1]
-    path = "/home/ibr/Pictures/Wallpapers/wallhaven-rqyqkj_1920x1080.png"
+    path = ""
 
 [widget.battery]
 show_label = false
