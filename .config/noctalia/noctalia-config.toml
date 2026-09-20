@@ -3,10 +3,10 @@ enable_overdrive = true
 enable_sounds = true
 
 [bar.default]
-border = "primary"
+border = "secondary"
 border_width = 2.0
 concave_edge_corners = false
-end = [ "tray", "network", "bluetooth", "volume", "brightness", "battery" ]
+end = [ "tray", "network", "bluetooth", "volume", "brightness", "battery", "widget" ]
 font_family = "JetBrainsMono Nerd Font"
 hover_highlight = false
 margin_edge = 6
@@ -26,7 +26,7 @@ sidebar_section = "none"
 enabled = false
 
 [location]
-address = ""
+address = "Srinagar"
 
 [lockscreen]
 blur_intensity = 0.0
@@ -34,8 +34,9 @@ fingerprint = false
 tint_intensity = 0.0
 
 [lockscreen_widgets]
+enabled = true
 schema_version = 2
-widget_order = [ "lockscreen-login-box@eDP-1" ]
+widget_order = [ "lockscreen-login-box@eDP-1", "lockscreen-widget-0000000000000001" ]
 
     [lockscreen_widgets.grid]
     cell_size = 24
@@ -43,10 +44,10 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
     visible = true
 
     [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
-    box_height = 70.0
-    box_width = 400.0
+    box_height = 196.0
+    box_width = 810.0
     cx = 683.0
-    cy = 419.0
+    cy = 598.0
     output = "eDP-1"
     placement_height = 768.0
     placement_width = 1366.0
@@ -60,7 +61,7 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
         center_password_text = false
         input_opacity = 1.0
         input_radius = 6.0
-        layout = "compact"
+        layout = "regular"
         show_caps_lock = true
         show_keyboard_layout = true
         show_login_button = true
@@ -69,11 +70,27 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
         show_unlock_hint = true
         show_weather = true
 
+    [lockscreen_widgets.widget.lockscreen-widget-0000000000000001]
+    box_height = 72.0
+    box_width = 720.0
+    cx = 683.0
+    cy = 552.0
+    output = "eDP-1"
+    placement_height = 768.0
+    placement_width = 1366.0
+    rotation = 0.0
+    type = "audio_visualizer"
+
+        [lockscreen_widgets.widget.lockscreen-widget-0000000000000001.settings]
+        background = false
+        bands = 32
+        show_when_idle = true
+
 [plugins]
-enabled = []
+enabled = [ "oldirtty/color_picker" ]
 
 [shell]
-avatar_path = ""
+avatar_path = "/home/ibr/Pictures/Wallpapers/BG1.png"
 button_borders = false
 card_borders = false
 corner_radius_scale = 0.0
@@ -83,6 +100,7 @@ password_style = "random"
 polkit_agent = true
 popup_borders = false
 popup_shadows = false
+telemetry_enabled = true
 
     [shell.animation]
     enabled = false
@@ -90,6 +108,7 @@ popup_shadows = false
     [shell.launcher]
     categories = false
     show_icons = false
+    sort_by_usage = false
 
     [shell.panel]
     borders = false
@@ -104,26 +123,26 @@ popup_shadows = false
 [theme]
 builtin = "Rosé Pine"
 community_palette = "Kanagawa Kasumi"
-custom_palette = "Solitudessss"
+custom_palette = "Solitude"
 mode = "dark"
 source = "custom"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
-    builtin_ids = [ "btop", "cava", "foot", "gtk3", "gtk4", "hyprland", "kcolorscheme", "kitty", "qt", "starship" ]
-    community_ids = [ "pywalfox", "telegram", "fastfetch" ]
+    builtin_ids = [ "btop", "cava", "foot", "gtk3", "gtk4", "hyprland", "kcolorscheme", "qt", "starship" ]
+    community_ids = [ "telegram", "neovim", "fastfetch" ]
 
 [wallpaper]
 directory = "~/Pictures/Wallpapers"
 
     [wallpaper.default]
-    path = "~/Pictures/Wallpapers"
+    path = "/home/ibr/Pictures/Wallpapers/BG1.png"
 
     [wallpaper.last]
-    path = ""
+    path = "/home/ibr/Pictures/Wallpapers/BG1.png"
 
     [wallpaper.monitors.eDP-1]
-    path = ""
+    path = "/home/ibr/Pictures/Wallpapers/BG1.png"
 
 [widget.battery]
 show_label = false
@@ -150,6 +169,9 @@ anchor = true
 
 [widget.volume]
 show_label = false
+
+[widget.widget]
+type = "oldirtty/color_picker:widget"
 
 [widget.workspaces]
 style = "minimal"

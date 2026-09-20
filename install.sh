@@ -162,6 +162,7 @@ PACKAGES=(
     greetd
     noctalia-greeter-git
     noctalia-hyprland-meta
+    uwsm
     hyprland-uwsm
     bluez
     ufw
