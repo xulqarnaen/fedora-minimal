@@ -4,7 +4,7 @@
 
 return {
     terminal = "foot",
-    fileManager = "thunar",
+    fileManager = "nautilus",
     browser = "brave-origin",
     noctalia = "noctalia msg ",
     webapp = "webapp",
