@@ -14,7 +14,7 @@ margin_ends = 6
 panel_overlap = 0
 position = "bottom"
 radius = 0
-start = [ "launcher", "workspaces", "media" ]
+start = [ "launcher", "workspaces", "audio_visualizer", "media" ]
 
 [battery]
 warning_threshold = 20
@@ -146,6 +146,10 @@ directory = "~/Pictures/Wallpapers"
 
     [wallpaper.monitors.eDP-1]
     path = "/home/ibr/Pictures/Wallpapers/BG2.png"
+
+[widget.audio_visualizer]
+mirrored = false
+reversed = true
 
 [widget.battery]
 show_label = false
