@@ -1,4 +1,4 @@
--- Appearance
+---- Appearance ----
 hl.config({
     general = {
         gaps_in = 3, gaps_out = 6,
@@ -15,7 +15,7 @@ hl.config({
         blur = { enabled = false },
     },
 
-    -- Layouts
+---- Layouts ----
     dwindle = {
         preserve_split = true,
         force_split = 2,
@@ -26,7 +26,7 @@ hl.config({
         explicit_column_widths = "0.5, 1.0",
     },
 
-    -- Miscellaneous
+---- Miscellaneous ----
     misc = {
         force_default_wallpaper = 0,
         disable_hyprland_logo = true,
@@ -36,7 +36,7 @@ hl.config({
     },
 })
 
--- Animation curves
+---- Animation curves ----
 local animations = true
 
 hl.curve("easeOutQuint", { type = "bezier", points = { { 0.23, 1 }, { 0.32, 1 } } })
@@ -45,7 +45,7 @@ hl.curve("linear", { type = "bezier", points = { { 0, 0 }, { 1, 1 } } })
 hl.curve("almostLinear", { type = "bezier", points = { { 0.5, 0.5 }, { 0.75, 1.0 } } })
 hl.curve("quick", { type = "bezier", points = { { 0.15, 0 }, { 0.1, 1 } } })
 
--- Animations
+---- Animations ----
 hl.animation({ leaf = "global", enabled = animations, speed = 10, bezier = "default" })
 hl.animation({ leaf = "border", enabled = animations, speed = 5.39, bezier = "easeOutQuint" })
 hl.animation({ leaf = "windows", enabled = animations, speed = 3.79, bezier = "easeOutQuint" })

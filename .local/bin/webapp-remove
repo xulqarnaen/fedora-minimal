@@ -1,0 +1,83 @@
+#!/bin/bash
+
+# Remove a web app desktop launcher
+# Usage: webapp-remove [name]
+
+set -e
+
+ICON_DIR="$HOME/.local/share/icons/hicolor/256x256/apps"
+DESKTOP_DIR="$HOME/.local/share/applications"
+
+WEB_APPS=()
+WEB_APP_PATHS=()
+
+while IFS= read -r -d '' file; do
+  # New launchers
+  if grep -q '^X-WebApp=true$' "$file" 2>/dev/null ||
+     # Existing launchers made by the previous version
+     grep -q '^Exec=webapp ' "$file" 2>/dev/null; then
+
+    WEB_APPS+=("$(basename "${file%.desktop}")")
+    WEB_APP_PATHS+=("$file")
+  fi
+done < <(
+  find "$DESKTOP_DIR" -maxdepth 1 -type f -name '*.desktop' -print0 2>/dev/null
+)
+
+path_for_web_app() {
+  local wanted="$1"
+  local i
+
+  for i in "${!WEB_APPS[@]}"; do
+    if [[ ${WEB_APPS[$i]} == "$wanted" ]]; then
+      printf '%s\n' "${WEB_APP_PATHS[$i]}"
+      return 0
+    fi
+  done
+
+  return 1
+}
+
+if (( $# == 0 )); then
+  if ((${#WEB_APPS[@]} == 0)); then
+    echo "No web apps to remove."
+    exit 1
+  fi
+
+  mapfile -t SORTED_WEB_APPS < <(
+    printf '%s\n' "${WEB_APPS[@]}" | sort
+  )
+
+  APP_NAME=$(gum choose \
+    --header "Select web app to remove" \
+    "${SORTED_WEB_APPS[@]}")
+else
+  APP_NAME="$*"
+fi
+
+[[ -n $APP_NAME ]] || exit 1
+
+DESKTOP_FILE=$(path_for_web_app "$APP_NAME") || {
+  echo "Web app not found: $APP_NAME"
+  exit 1
+}
+
+ICON=$(sed -n 's/^Icon=//p' "$DESKTOP_FILE" | head -1)
+
+rm -f "$DESKTOP_FILE"
+
+# Only remove icons owned by this webapp setup.
+case "$ICON" in
+  "$ICON_DIR"/*)
+    rm -f "$ICON"
+    ;;
+  *.png)
+    # Existing launchers stored only the icon name.
+    rm -f "$ICON_DIR/$ICON"
+    rm -f "$ICON_DIR/$(basename "$ICON")"
+    ;;
+esac
+
+update-desktop-database "$DESKTOP_DIR" &>/dev/null || true
+
+echo "Web app removed: $APP_NAME"

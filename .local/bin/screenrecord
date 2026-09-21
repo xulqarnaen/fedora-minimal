@@ -1,0 +1,56 @@
+```bash
+#!/bin/bash
+
+OUTPUT_DIR="$HOME/Videos"
+STATE_FILE="${XDG_RUNTIME_DIR}/screenrecord.pid"
+
+# ── Stop ──────────────────────────────────────────────────────────
+
+if [[ -f "$STATE_FILE" ]]; then
+    pid=$(cat "$STATE_FILE")
+
+    if kill -0 "$pid" 2>/dev/null; then
+        kill -SIGINT "$pid"
+
+        # Wait for GSR to finish writing the MP4
+        for _ in {1..50}; do
+            kill -0 "$pid" 2>/dev/null || break
+            sleep 0.1
+        done
+    fi
+
+    rm -f "$STATE_FILE"
+
+    noctalia msg notification-show \
+        "Screen recording stopped" \
+        "Saved to ~/Videos"
+
+    exit 0
+fi
+
+# ── Start ─────────────────────────────────────────────────────────
+
+mkdir -p "$OUTPUT_DIR"
+
+filename="$OUTPUT_DIR/screenrecording-$(date '+%Y-%m-%d_%H-%M-%S').mp4"
+
+gpu-screen-recorder \
+    -w portal \
+    -k h264 \
+    -f 60 \
+    -fm cfr \
+    -fallback-cpu-encoding yes \
+    -o "$filename" &
+
+pid=$!
+
+echo "$pid" > "$STATE_FILE"
+
+# Give GSR a moment to launch the portal picker
+sleep 0.3
+
+noctalia msg notification-show \
+    "Screen recording started" \
+    "Choose a screen or window to record"
+```
+

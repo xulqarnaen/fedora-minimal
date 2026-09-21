@@ -107,7 +107,7 @@ telemetry_enabled = true
 
     [shell.launcher]
     categories = false
-    show_icons = false
+    show_icons = true
     sort_by_usage = false
 
     [shell.panel]
@@ -119,6 +119,9 @@ telemetry_enabled = true
     open_near_click_control_center = true
     session_placement = "floating"
     wallpaper_placement = "floating"
+
+    [shell.screenshot]
+    directory = "~/Pictures/Screenshots"
 
 [theme]
 builtin = "Rosé Pine"
@@ -136,13 +139,13 @@ wallpaper_scheme = "m3-content"
 directory = "~/Pictures/Wallpapers"
 
     [wallpaper.default]
-    path = "/home/ibr/Pictures/Wallpapers/wallhaven-5yd6d5_1920x1080.png"
+    path = "/home/ibr/Pictures/Wallpapers/BG2.png"
 
     [wallpaper.last]
-    path = "/home/ibr/Pictures/Wallpapers/wallhaven-5yd6d5_1920x1080.png"
+    path = "/home/ibr/Pictures/Wallpapers/BG2.png"
 
     [wallpaper.monitors.eDP-1]
-    path = "/home/ibr/Pictures/Wallpapers/wallhaven-5yd6d5_1920x1080.png"
+    path = "/home/ibr/Pictures/Wallpapers/BG2.png"
 
 [widget.battery]
 show_label = false
