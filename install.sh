@@ -189,10 +189,7 @@ PACKAGES=(
     xdg-user-dirs
     xdg-utils
 
-    thunar
-    thunar-media-tags-plugin
-    thunar-volman
-    thunar-archive-plugin
+    nautilus
 
     power-profiles-daemon
 
@@ -207,8 +204,8 @@ PACKAGES=(
     dosfstools
     exfatprogs
 
-    matugen
 
+    gum
     adw-gtk3-theme
     imv
     evince
@@ -354,12 +351,6 @@ setup_noctalia_greeter() {
     ); then
         echo "greetd configuration is already up to date."
     else
-        if [[ -f "$greetd_config_file" ]]; then
-            cp -a \
-                "$greetd_config_file" \
-                "$greetd_config_file.bak.$(date +%s)"
-        fi
-
         echo "Writing greetd configuration..."
 
         cat > "$greetd_config_file" <<EOF
@@ -394,6 +385,7 @@ fi
 
 echo "Noctalia Greeter setup: Done."
 
+
 if ! systemctl enable greetd; then
     echo "${RED}ERROR: Failed to enable greetd.service.${ALL_OFF}" >&2
     exit 1
@@ -412,55 +404,11 @@ mkdir -p \
     "$CONFIG_DIR" \
     "$ACTUAL_USER_HOME/.local/bin"
 
-paths_match() {
-    local source="$1" target="$2"
-
-    if [[ -L "$source" || -L "$target" ]]; then
-        [[ -L "$source" && -L "$target" && "$(readlink "$source")" == "$(readlink "$target")" ]]
-    elif [[ -d "$source" && -d "$target" ]]; then
-        command -v diff >/dev/null 2>&1 && diff -qr "$source" "$target" >/dev/null 2>&1
-    elif [[ -f "$source" && -f "$target" ]]; then
-        cmp -s "$source" "$target"
-    else
-        return 1
-    fi
-}
-
 deploy_configs() {
-    local backup_timestamp
-    local item
-    local name
-    local target
-
     echo ""
     echo "--- Configuration Deployment ---"
-
-    backup_timestamp="$(date +%s)"
-
-    echo "Checking existing configuration files..."
-
-    # Back up top-level entries only when the repository version differs.
-    while IFS= read -r -d '' item; do
-        name="$(basename "$item")"
-        target="$CONFIG_DIR/$name"
-
-        if [[ -e "$target" || -L "$target" ]]; then
-            if paths_match "$item" "$target"; then
-                echo "Already up to date: $name"
-            else
-                echo "Backing up changed configuration: $name"
-
-                if ! mv "$target" "$CONFIG_DIR/$name.bak.$backup_timestamp"; then
-                    echo "${RED}ERROR: Failed to back up $target.${ALL_OFF}" >&2
-                    return 1
-                fi
-            fi
-        fi
-    done < <(find "$REPO_DIR/.config" -mindepth 1 -maxdepth 1 -print0)
-
     echo "Copying configuration files..."
 
-    # Copy the complete directory contents, including hidden entries.
     if ! cp -a "$REPO_DIR/.config/." "$CONFIG_DIR/"; then
         echo "${RED}ERROR: Failed to copy configuration files.${ALL_OFF}" >&2
         return 1
@@ -600,16 +548,16 @@ if ! run_as_user xdg-user-dirs-update; then
     echo "${RED}Warning: Failed to update user directories.${ALL_OFF}"
 fi
 
-if ! run_as_user xdg-mime default thunar.desktop inode/directory; then
-    echo "${RED}Warning: Failed to set Thunar as default for directories.${ALL_OFF}"
+if ! run_as_user xdg-mime default org.gnome.Nautilus.desktop inode/directory; then
+    echo "${RED}Warning: Failed to set Nautilus as default for directories.${ALL_OFF}"
 fi
 
-if ! run_as_user xdg-mime default thunar.desktop application/x-gnome-saved-search; then
-    echo "${RED}Warning: Failed to set Thunar as default for saved searches.${ALL_OFF}"
+if ! run_as_user xdg-mime default org.gnome.Nautilus.desktop application/x-gnome-saved-search; then
+    echo "${RED}Warning: Failed to set Nautilus as default for saved searches.${ALL_OFF}"
 fi
 
 # ============================================================
-# Thunar Bookmarks
+# Nautilus Bookmarks
 # ============================================================
 
 GTK_DIR="$CONFIG_DIR/gtk-3.0"
