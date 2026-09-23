@@ -190,6 +190,7 @@ PACKAGES=(
     xdg-utils
 
     nautilus
+    tumbler
 
     power-profiles-daemon
 
