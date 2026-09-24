@@ -119,7 +119,7 @@ hl.bind("SUPER + CTRL + I", hl.dsp.exec_cmd(ipc .. "caffeine-toggle"))
 hl.bind("SUPER + CTRL + N", hl.dsp.exec_cmd(ipc .. "nightlight-force-toggle"))
 
 -- Noctalia control center
-hl.bind("SUPER + N", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center notifications"))
+
 hl.bind("SUPER + CTRL + M", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center media"))
 hl.bind("SUPER + CTRL + W", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center network"))
 hl.bind("SUPER + CTRL + B", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center bluetooth"))
@@ -130,7 +130,7 @@ hl.bind("SUPER + CTRL + C", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center 
 
 -- Notifications
 hl.bind("SUPER + comma", hl.dsp.exec_cmd(ipc .. "notification-clear-active"))
-
+hl.bind("SUPER + CTRL + comma", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center notifications"))
 -- Session
 hl.bind("SUPER + CTRL + L", hl.dsp.exec_cmd(ipc .. "session lock"))
 hl.bind("SUPER + Escape", hl.dsp.exec_cmd(ipc .. "panel-toggle session"))
