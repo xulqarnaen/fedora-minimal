@@ -216,6 +216,9 @@ PACKAGES=(
 
     qt6ct
     mpv
+    ffmpeg
+    ffmpeg-libs
+    libavcodec-freeworld
     brave-origin
 
     wl-clip-persist
