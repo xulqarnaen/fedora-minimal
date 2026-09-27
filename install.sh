@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-set -u
-set -o pipefail
+set -euo pipefail
 
 export LC_MESSAGES=C
 export LANG=C
@@ -104,9 +103,7 @@ done
 
 echo "Updating system packages prior to setup..."
 
-if ! dnf upgrade -y; then
-    echo "${RED}Warning: System package upgrade encountered an issue. Proceeding anyway...${ALL_OFF}" >&2
-fi
+dnf upgrade -y
 
 if ! dnf copr --help >/dev/null 2>&1; then
     echo "Installing DNF5 COPR support..."
@@ -178,7 +175,6 @@ PACKAGES=(
     pipewire
     pipewire-pulseaudio
     pipewire-alsa
-    wireplumber
     cava
 
     fish
@@ -217,7 +213,6 @@ PACKAGES=(
     qt6ct
     mpv
     ffmpeg
-    ffmpeg-libs
     libavcodec-freeworld
     brave-origin
 
@@ -268,23 +263,22 @@ setup_ufw() {
     echo ""
     echo "--- UFW Firewall Setup ---"
 
-    if systemctl cat firewalld.service >/dev/null 2>&1; then
-        if systemctl is-active --quiet firewalld.service || systemctl is-enabled --quiet firewalld.service; then
-            if ! systemctl disable --now firewalld.service; then
-                echo "${RED}ERROR: Failed to disable firewalld.service.${ALL_OFF}" >&2
-                return 1
-            fi
+    if systemctl is-active --quiet firewalld.service || systemctl is-enabled --quiet firewalld.service; then
+        if ! systemctl disable --now firewalld.service; then
+            echo "${RED}ERROR: Failed to disable firewalld.service.${ALL_OFF}" >&2
+            return 1
         fi
     fi
 
-    ufw default deny incoming >/dev/null &&
-    ufw default allow outgoing >/dev/null &&
-    ufw allow 53317/tcp >/dev/null &&
-    ufw allow 53317/udp >/dev/null &&
-    ufw --force enable >/dev/null || {
+    if ! ufw default deny incoming >/dev/null ||
+       ! ufw default allow outgoing >/dev/null ||
+       ! ufw allow 53317/tcp >/dev/null ||
+       ! ufw allow 53317/udp >/dev/null ||
+       ! ufw --force enable >/dev/null ||
+       ! systemctl enable --now ufw.service >/dev/null; then
         echo "${RED}ERROR: UFW setup failed.${ALL_OFF}" >&2
         return 1
-    }
+    fi
 
     echo "UFW enabled: incoming denied, outgoing allowed, LocalSend 53317/tcp and 53317/udp allowed."
 }
