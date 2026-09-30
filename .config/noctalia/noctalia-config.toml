@@ -1,9 +1,9 @@
 [audio]
-enable_overdrive = true
+enable_overdrive = false
 enable_sounds = true
 
 [bar.default]
-border = "secondary"
+border = "primary"
 border_width = 2.0
 concave_edge_corners = false
 end = [ "tray", "network", "bluetooth", "volume", "brightness", "battery" ]
@@ -12,8 +12,9 @@ hover_highlight = false
 margin_edge = 6
 margin_ends = 6
 panel_overlap = 0
-position = "bottom"
+position = "top"
 radius = 0
+shadow = false
 start = [ "launcher", "workspaces", "audio_visualizer", "media" ]
 
 [battery]
@@ -24,6 +25,10 @@ sidebar_section = "none"
 
 [desktop_widgets]
 enabled = false
+
+[dock]
+background_opacity = 0.99999997764825821
+inactive_opacity = 0.99999997764825821
 
 [location]
 address = "Srinagar"
@@ -86,12 +91,29 @@ widget_order = [ "lockscreen-login-box@eDP-1", "lockscreen-widget-00000000000000
         bands = 32
         show_when_idle = true
 
+[notification]
+background_opacity = 0.99999997764825821
+
+[osd]
+background_opacity = 0.99999997764825821
+
 [plugins]
-enabled = [ "oldirtty/color_picker" ]
+enabled = []
+
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/noctalia-dev/official-plugins"
+    name = "official"
+
+    [[plugins.source]]
+    enabled = false
+    kind = "git"
+    location = "https://github.com/noctalia-dev/community-plugins"
+    name = "community"
 
 [shell]
 app_icon_color = "outline"
-avatar_path = "/home/ibr/Pictures/Wallpapers/BG1.png"
+avatar_path = "/home/ibr/Pictures/Wallpapers/qs-niri.jpg"
 button_borders = false
 card_borders = false
 corner_radius_scale = 0.0
@@ -104,10 +126,10 @@ popup_shadows = false
 telemetry_enabled = true
 
     [shell.animation]
-    enabled = true
+    enabled = false
 
     [shell.launcher]
-    categories = true
+    categories = false
     show_icons = false
     sort_by_usage = false
 
@@ -125,11 +147,11 @@ telemetry_enabled = true
     directory = "~/Pictures/Screenshots"
 
 [theme]
-builtin = "Tokyo-Night"
-community_palette = "Kanagawa Kasumi"
+builtin = "Catppuccin"
+community_palette = "Everforest Alt"
 custom_palette = "Solitude2"
-mode = "dark"
-source = "custom"
+mode = "auto"
+source = "builtin"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
@@ -140,13 +162,19 @@ wallpaper_scheme = "m3-content"
 directory = "~/Pictures/Wallpapers"
 
     [wallpaper.default]
-    path = "/home/ibr/Pictures/Wallpapers/BG2.png"
+    path = "/home/ibr/Pictures/Wallpapers/qs-niri.jpg"
 
     [wallpaper.last]
-    path = "/home/ibr/Pictures/Wallpapers/BG2.png"
+    path = "/home/ibr/Pictures/Wallpapers/qs-niri.jpg"
 
     [wallpaper.monitors.eDP-1]
-    path = "/home/ibr/Pictures/Wallpapers/BG2.png"
+    path = "/home/ibr/Pictures/Wallpapers/qs-niri.jpg"
+
+    [[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/home/ibr/Pictures/Wallpapers/tanjiro-kamado-gruv.jpg"
+    theme_mode = "dark"
+    wallpaper_scheme = "m3-content"
 
 [widget.audio_visualizer]
 mirrored = false
