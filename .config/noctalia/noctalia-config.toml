@@ -3,10 +3,11 @@ enable_overdrive = false
 enable_sounds = true
 
 [bar.default]
-border = "primary"
+border = "secondary"
 border_width = 2.0
+center = [ "privacy", "clock" ]
 concave_edge_corners = false
-end = [ "tray", "network", "bluetooth", "volume", "brightness", "battery" ]
+end = [ "cpu", "tray", "network", "bluetooth", "volume", "brightness", "battery" ]
 font_family = "JetBrainsMono Nerd Font"
 hover_highlight = false
 margin_edge = 6
@@ -15,10 +16,13 @@ panel_overlap = 0
 position = "top"
 radius = 0
 shadow = false
-start = [ "launcher", "workspaces", "audio_visualizer", "media" ]
+start = [ "launcher", "workspaces", "audio_visualizer", "media", "active_window" ]
 
 [battery]
 warning_threshold = 20
+
+[brightness]
+minimum_brightness = 0.04999999888241291
 
 [control_center]
 sidebar_section = "none"
@@ -28,7 +32,35 @@ enabled = false
 
 [dock]
 background_opacity = 0.99999997764825821
+border = "primary"
+border_width = 2.0
+concave_edge_corners = false
+cross_axis_padding = 5
+enabled = true
+icon_size = 45
 inactive_opacity = 0.99999997764825821
+item_spacing = 5
+launcher_icon = "brand-bumble"
+launcher_position = "start"
+magnification_scale = 2.0
+main_axis_padding = 10
+margin_edge = 6
+pinned = [
+    "dev.noctalia.Noctalia",
+    "foot",
+    "org.gnome.Evince",
+    "org.gnome.Nautilus",
+    "brave-origin",
+    "Photos",
+    "org.telegram.desktop",
+    "YouTube Music",
+    "Calendar"
+]
+radius = 0
+reserve_space = false
+shadow = false
+show_dots = true
+smart_auto_hide = true
 
 [location]
 address = "Srinagar"
@@ -37,6 +69,7 @@ address = "Srinagar"
 blur_intensity = 0.0
 fingerprint = false
 tint_intensity = 0.0
+transition = []
 
 [lockscreen_widgets]
 enabled = true
@@ -113,9 +146,10 @@ enabled = []
 
 [shell]
 app_icon_color = "outline"
-avatar_path = "/home/ibr/Pictures/Wallpapers/qs-niri.jpg"
+avatar_path = "/home/ibr/Pictures/Wallpapers/02-crowned.jpg"
 button_borders = false
 card_borders = false
+clipboard_auto_paste = "ctrl_v"
 corner_radius_scale = 0.0
 font_family = "JetBrainsMono Nerd Font"
 input_borders = false
@@ -123,6 +157,7 @@ password_style = "random"
 polkit_agent = true
 popup_borders = false
 popup_shadows = false
+screen_time_enabled = true
 telemetry_enabled = true
 
     [shell.animation]
@@ -130,7 +165,7 @@ telemetry_enabled = true
 
     [shell.launcher]
     categories = false
-    show_icons = false
+    show_icons = true
     sort_by_usage = false
 
     [shell.panel]
@@ -148,10 +183,10 @@ telemetry_enabled = true
 
 [theme]
 builtin = "Catppuccin"
-community_palette = "Everforest Alt"
+community_palette = "Catppuccin Frappe Blue"
 custom_palette = "Solitude2"
-mode = "auto"
-source = "builtin"
+mode = "dark"
+source = "custom"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
@@ -162,19 +197,24 @@ wallpaper_scheme = "m3-content"
 directory = "~/Pictures/Wallpapers"
 
     [wallpaper.default]
-    path = "/home/ibr/Pictures/Wallpapers/qs-niri.jpg"
+    path = "/home/ibr/Pictures/Wallpapers/BG2.png"
 
     [wallpaper.last]
-    path = "/home/ibr/Pictures/Wallpapers/qs-niri.jpg"
+    path = "/home/ibr/Pictures/Wallpapers/BG2.png"
 
     [wallpaper.monitors.eDP-1]
-    path = "/home/ibr/Pictures/Wallpapers/qs-niri.jpg"
+    path = "/home/ibr/Pictures/Wallpapers/BG2.png"
 
     [[wallpaper.favorite]]
     palette_source = "wallpaper"
     path = "/home/ibr/Pictures/Wallpapers/tanjiro-kamado-gruv.jpg"
     theme_mode = "dark"
     wallpaper_scheme = "m3-content"
+
+[widget.active_window]
+capsule_fill = "tertiary"
+display = "text_only"
+title_scroll = "on_hover"
 
 [widget.audio_visualizer]
 mirrored = false
@@ -189,16 +229,24 @@ show_label = false
 [widget.clock]
 format = "%I:%M %p - %A, %B %d"
 
+[widget.cpu]
+show_glyph = false
+stat = "ram_used"
+
 [widget.launcher]
 glyph = "brand-bumble"
 
 [widget.media]
 hide_album_art = true
 hide_when_no_media = true
+show_progress = true
 title_scroll = "on_hover"
 
 [widget.network]
 show_label = false
+
+[widget.privacy]
+hide_inactive = true
 
 [widget.session]
 anchor = true
