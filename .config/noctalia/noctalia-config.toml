@@ -36,7 +36,7 @@ border = "primary"
 border_width = 2.0
 concave_edge_corners = false
 cross_axis_padding = 5
-enabled = true
+enabled = false
 icon_size = 45
 inactive_opacity = 0.99999997764825821
 item_spacing = 5
@@ -57,10 +57,8 @@ pinned = [
     "Calendar"
 ]
 radius = 0
-reserve_space = false
 shadow = false
 show_dots = true
-smart_auto_hide = true
 
 [location]
 address = "Srinagar"

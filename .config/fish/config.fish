@@ -8,3 +8,4 @@ end
 starship init fish | source
 
 set -gx QT_QPA_PLATFORMTHEME qt6ct
+alias ll='ls -l --color=auto'

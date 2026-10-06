@@ -103,7 +103,6 @@ hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(ipc .. "brightness-down"), { lo
 -- Noctalia panels
 hl.bind("SUPER + Space", hl.dsp.exec_cmd(ipc .. "panel-toggle launcher"))
 hl.bind("SUPER + ALT + Space", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center"))
-hl.bind("SUPER + SHIFT + Space", hl.dsp.exec_cmd(ipc .. "bar-toggle"))
 hl.bind("SUPER + CTRL + V", hl.dsp.exec_cmd(ipc .. "panel-toggle clipboard"))
 hl.bind("SUPER + CTRL + Space", hl.dsp.exec_cmd(ipc .. "panel-toggle wallpaper"))
 hl.bind("SUPER + CTRL + ALT + Space", hl.dsp.exec_cmd(ipc .. "wallpaper-random"))
@@ -115,6 +114,8 @@ hl.bind("SHIFT + Print", hl.dsp.exec_cmd(ipc .. "screenshot-fullscreen"))
 hl.bind("ALT + Print", hl.dsp.exec_cmd("screenrecord"))
 
 -- Noctalia toggles
+hl.bind("SUPER + SHIFT + Space", hl.dsp.exec_cmd(ipc .. "bar-toggle"))
+hl.bind("SUPER + SHIFT + CTRL + Space", hl.dsp.exec_cmd(ipc .. "dock-toggle"))
 hl.bind("SUPER + CTRL + I", hl.dsp.exec_cmd(ipc .. "caffeine-toggle"))
 hl.bind("SUPER + CTRL + N", hl.dsp.exec_cmd(ipc .. "nightlight-force-toggle"))
 
