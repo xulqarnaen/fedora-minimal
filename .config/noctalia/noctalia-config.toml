@@ -7,16 +7,16 @@ border = "secondary"
 border_width = 2.0
 center = [ "privacy", "clock" ]
 concave_edge_corners = false
-end = [ "cpu", "tray", "network", "bluetooth", "volume", "brightness", "battery" ]
+end = [ "media", "cpu", "tray", "network", "bluetooth", "volume", "brightness", "battery" ]
 font_family = "JetBrainsMono Nerd Font"
 hover_highlight = false
 margin_edge = 6
 margin_ends = 6
 panel_overlap = 0
-position = "top"
+position = "bottom"
 radius = 0
 shadow = false
-start = [ "launcher", "workspaces", "audio_visualizer", "media", "active_window" ]
+start = [ "launcher", "workspaces", "audio_visualizer", "active_window" ]
 
 [battery]
 warning_threshold = 20
@@ -24,29 +24,41 @@ warning_threshold = 20
 [brightness]
 minimum_brightness = 0.04999999888241291
 
+[calendar]
+enabled = true
+
+    [calendar.account.personal_google]
+    type = "google"
+
+    [calendar.account.xulqarnaen]
+    name = "ibr"
+    type = "google"
+
 [control_center]
 sidebar_section = "none"
+
+    [control_center.calendar]
+    show_week_numbers = true
 
 [desktop_widgets]
 enabled = false
 
 [dock]
 background_opacity = 0.99999997764825821
-border = "primary"
+border = "secondary"
 border_width = 2.0
 concave_edge_corners = false
 cross_axis_padding = 5
 enabled = false
-icon_size = 45
+icon_size = 40
 inactive_opacity = 0.99999997764825821
 item_spacing = 5
 launcher_icon = "brand-bumble"
 launcher_position = "start"
-magnification_scale = 2.0
-main_axis_padding = 10
+magnification_scale = 1.7500000111758709
+main_axis_padding = 0
 margin_edge = 6
 pinned = [
-    "dev.noctalia.Noctalia",
     "foot",
     "org.gnome.Evince",
     "org.gnome.Nautilus",
@@ -56,6 +68,7 @@ pinned = [
     "YouTube Music",
     "Calendar"
 ]
+position = "right"
 radius = 0
 shadow = false
 show_dots = true
@@ -144,7 +157,7 @@ enabled = []
 
 [shell]
 app_icon_color = "outline"
-avatar_path = "/home/ibr/Pictures/Wallpapers/02-crowned.jpg"
+avatar_path = "/home/ibr/Pictures/Wallpapers/wallhaven-rr3x3m.jpg"
 button_borders = false
 card_borders = false
 clipboard_auto_paste = "ctrl_v"
@@ -159,7 +172,7 @@ screen_time_enabled = true
 telemetry_enabled = true
 
     [shell.animation]
-    enabled = false
+    enabled = true
 
     [shell.launcher]
     categories = false
@@ -180,28 +193,28 @@ telemetry_enabled = true
     directory = "~/Pictures/Screenshots"
 
 [theme]
-builtin = "Catppuccin"
-community_palette = "Catppuccin Frappe Blue"
+builtin = "Gruvbox"
+community_palette = "Cyberpunk"
 custom_palette = "Solitude2"
 mode = "dark"
-source = "custom"
+source = "community"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
-    builtin_ids = [ "btop", "cava", "foot", "gtk3", "gtk4", "hyprland", "kcolorscheme", "qt", "starship" ]
-    community_ids = [ "telegram", "neovim", "fastfetch" ]
+    builtin_ids = [ "foot", "gtk3", "gtk4", "hyprland", "kcolorscheme", "qt", "starship" ]
+    community_ids = [ "telegram" ]
 
 [wallpaper]
 directory = "~/Pictures/Wallpapers"
 
     [wallpaper.default]
-    path = "/home/ibr/Pictures/Wallpapers/BG2.png"
+    path = "/home/ibr/Pictures/Wallpapers/wallhaven-rr3x3m.jpg"
 
     [wallpaper.last]
-    path = "/home/ibr/Pictures/Wallpapers/BG2.png"
+    path = "/home/ibr/Pictures/Wallpapers/wallhaven-rr3x3m.jpg"
 
     [wallpaper.monitors.eDP-1]
-    path = "/home/ibr/Pictures/Wallpapers/BG2.png"
+    path = "/home/ibr/Pictures/Wallpapers/wallhaven-rr3x3m.jpg"
 
     [[wallpaper.favorite]]
     palette_source = "wallpaper"
@@ -226,18 +239,20 @@ show_label = false
 
 [widget.clock]
 format = "%I:%M %p - %A, %B %d"
+vertical_format = "%I:%M %p"
 
 [widget.cpu]
 show_glyph = false
 stat = "ram_used"
+visualization = "none"
 
 [widget.launcher]
 glyph = "brand-bumble"
 
 [widget.media]
+artist_first = true
 hide_album_art = true
 hide_when_no_media = true
-show_progress = true
 title_scroll = "on_hover"
 
 [widget.network]

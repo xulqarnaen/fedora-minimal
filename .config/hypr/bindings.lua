@@ -127,6 +127,7 @@ hl.bind("SUPER + CTRL + A", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center 
 hl.bind("SUPER + CTRL + D", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center monitor"))
 hl.bind("SUPER + CTRL + P", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center power"))
 hl.bind("SUPER + CTRL + C", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center calendar"))
+hl.bind("SUPER + CTRL + T", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center system"))
 
 -- Notifications
 hl.bind("SUPER + CTRL + comma", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center notifications"))
