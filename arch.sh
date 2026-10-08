@@ -163,8 +163,6 @@ OFFICIAL_PACKAGES=(
     wl-clip-persist
     starship
     curl
-
-    wireless-regdb
 )
 
 echo ""
@@ -277,53 +275,12 @@ if ! usermod -s "$FISH_SHELL" "$ACTUAL_USER"; then
     exit 1
 fi
 
-# NetworkManager, Bluetooth, PipeWire, and power management are owned by Archinstall.
-# Do not reconfigure or enable them here.
-
 if systemctl enable accounts-daemon.service; then
     echo "AccountsService enabled."
 else
     echo "${YELLOW}Warning: Failed to enable accounts-daemon.service.${ALL_OFF}"
 fi
 
-# ============================================================
-# 7. Wi-Fi Regulatory Domain
-# ============================================================
-
-# Keep the Wi-Fi configuration intentionally minimal:
-#   - use Arch's wireless regulatory database
-#   - set the country to India
-#   - do not change iwlwifi/iwlmvm module parameters
-#   - do not disable Wi-Fi power saving here
-
-configure_wireless_regdom() {
-    echo ""
-    echo "--- Wi-Fi Regulatory Domain ---"
-
-    local regdom_file="/etc/conf.d/wireless-regdom"
-
-    if [[ ! -f "$regdom_file" ]]; then
-        echo "${RED}ERROR: $regdom_file was not provided by wireless-regdb.${ALL_OFF}" >&2
-        return 1
-    fi
-
-    if grep -qE '^[[:space:]]*#?[[:space:]]*WIRELESS_REGDOM=' "$regdom_file"; then
-        sed -i -E 's|^[[:space:]]*#?[[:space:]]*WIRELESS_REGDOM=.*$|WIRELESS_REGDOM="IN"|' "$regdom_file"
-    else
-        printf '\nWIRELESS_REGDOM="IN"\n' >> "$regdom_file"
-    fi
-
-    if ! grep -qx 'WIRELESS_REGDOM="IN"' "$regdom_file"; then
-        echo "${RED}ERROR: Failed to set WIRELESS_REGDOM=IN.${ALL_OFF}" >&2
-        return 1
-    fi
-
-    echo "Wireless regulatory domain configured for India (IN)."
-}
-
-if ! configure_wireless_regdom; then
-    exit 1
-fi
 
 # ============================================================
 # 8. UFW Firewall
