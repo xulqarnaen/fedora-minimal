@@ -38,6 +38,7 @@ enabled = true
 sidebar_section = "none"
 
     [control_center.calendar]
+    show_events_card = false
     show_week_numbers = true
 
 [desktop_widgets]
@@ -141,8 +142,11 @@ background_opacity = 0.99999997764825821
 [osd]
 background_opacity = 0.99999997764825821
 
+[plugin_settings."noctalia/screen_recorder"]
+copy_to_clipboard = true
+
 [plugins]
-enabled = []
+enabled = [ "noctalia/screen_recorder" ]
 
     [[plugins.source]]
     kind = "git"
@@ -150,14 +154,13 @@ enabled = []
     name = "official"
 
     [[plugins.source]]
-    enabled = false
     kind = "git"
     location = "https://github.com/noctalia-dev/community-plugins"
     name = "community"
 
 [shell]
 app_icon_color = "outline"
-avatar_path = "/home/ibr/Pictures/Wallpapers/wallhaven-rr3x3m.jpg"
+avatar_path = "/home/ibr/Pictures/Wallpapers/wallhaven-8g8kmo_1920x1080.png"
 button_borders = false
 card_borders = false
 clipboard_auto_paste = "ctrl_v"
@@ -176,7 +179,7 @@ telemetry_enabled = true
 
     [shell.launcher]
     categories = false
-    show_icons = true
+    show_icons = false
     sort_by_usage = false
 
     [shell.panel]
@@ -195,32 +198,34 @@ telemetry_enabled = true
 [theme]
 builtin = "Gruvbox"
 community_palette = "Cyberpunk"
-custom_palette = "Solitude2"
+custom_palette = "solitude2"
 mode = "dark"
 source = "community"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
-    builtin_ids = [ "foot", "gtk3", "gtk4", "hyprland", "kcolorscheme", "qt", "starship" ]
-    community_ids = [ "telegram" ]
+    builtin_ids = [ "btop", "cava", "foot", "gtk3", "gtk4", "hyprland", "kcolorscheme", "qt", "starship" ]
+    community_ids = [ "telegram", "neovim" ]
+
+        [theme.templates.user.nvim_base16]
+        input_path = "~/.config/nvim/lua/matugen-template.lua"
+        output_path = "~/.config/nvim/lua/matugen.lua"
+        post_hook = "pkill -SIGUSR1 nvim"
 
 [wallpaper]
 directory = "~/Pictures/Wallpapers"
 
     [wallpaper.default]
-    path = "/home/ibr/Pictures/Wallpapers/wallhaven-rr3x3m.jpg"
+    path = "/home/ibr/Pictures/Wallpapers/wallhaven-8g8kmo_1920x1080.png"
 
     [wallpaper.last]
-    path = "/home/ibr/Pictures/Wallpapers/wallhaven-rr3x3m.jpg"
+    path = "/home/ibr/Pictures/Wallpapers/wallhaven-8g8kmo_1920x1080.png"
 
     [wallpaper.monitors.eDP-1]
-    path = "/home/ibr/Pictures/Wallpapers/wallhaven-rr3x3m.jpg"
+    path = "/home/ibr/Pictures/Wallpapers/wallhaven-8g8kmo_1920x1080.png"
 
     [[wallpaper.favorite]]
-    palette_source = "wallpaper"
-    path = "/home/ibr/Pictures/Wallpapers/tanjiro-kamado-gruv.jpg"
-    theme_mode = "dark"
-    wallpaper_scheme = "m3-content"
+    path = "/home/ibr/Pictures/Wallpapers/wallhaven-5ypg11_1920x1080.png"
 
 [widget.active_window]
 capsule_fill = "tertiary"
