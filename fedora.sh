@@ -65,11 +65,13 @@ if [[ -t 2 ]] && tput setaf 0 &>/dev/null; then
     BOLD="$(tput bold)"
     RED="${BOLD}$(tput setaf 1)"
     GREEN="${BOLD}$(tput setaf 2)"
+    YELLOW="${BOLD}$(tput setaf 3)"
 else
     ALL_OFF=""
     BOLD=""
     RED=""
     GREEN=""
+    YELLOW=""
 fi
 
 # ============================================================
@@ -191,6 +193,8 @@ PACKAGES=(
 
     nautilus
     gvfs-mtp
+
+    power-profiles-daemon
 
     unrar
     unzip
@@ -612,7 +616,7 @@ if ! run_as_user xdg-mime default org.gnome.Nautilus.desktop inode/directory; th
 fi
 
 if ! run_as_user xdg-mime default org.gnome.Nautilus.desktop application/x-gnome-saved-search; then
-    echo "${RED}Warning: Failed to set Nautilus as default for saved searches.${ALL_OFF}"
+    echo "${YELLOW}Warning: Failed to set Nautilus as default for saved searches.${ALL_OFF}"
 fi
 
 # ============================================================
