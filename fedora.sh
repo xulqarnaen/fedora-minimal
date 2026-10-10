@@ -193,7 +193,6 @@ PACKAGES=(
 
     nautilus
     gvfs-mtp
-    libayatana-appindicator-gtk3
 
     power-profiles-daemon
 
@@ -232,128 +231,6 @@ if ! dnf --setopt=install_weak_deps=False install -y "${PACKAGES[@]}"; then
     exit 1
 fi
 
-# ============================================================
-# LocalSend (Official Upstream Linux Bundle)
-# ============================================================
-
-install_localsend() {
-    echo ""
-    echo "--- LocalSend Setup ---"
-
-    local version="1.18.2"
-    local archive_sha256="287690a9a8eb6da9c83cc97b3e3030ac67daf32a7331fcf307d0939300658d16"
-    local base_dir="/opt/localsend"
-    local install_dir="$base_dir/$version"
-    local version_file="$install_dir/.version"
-    local archive_url="https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}-linux-x86-64.tar.gz"
-    local tmp_dir
-    local archive
-    local extracted_dir
-    local source_binary
-
-    if [[ -x "$install_dir/localsend_app" && -f "$version_file" && "$(<"$version_file")" == "$version" ]]; then
-        echo "LocalSend ${version} is already installed."
-    else
-        if ! tmp_dir="$(mktemp -d)"; then
-            echo "${RED}ERROR: Failed to create a temporary directory for LocalSend.${ALL_OFF}" >&2
-            return 1
-        fi
-        archive="$tmp_dir/LocalSend.tar.gz"
-        extracted_dir="$tmp_dir/extracted"
-
-        echo "Downloading LocalSend ${version}..."
-        if ! curl -fL --retry 3 --retry-delay 2 -o "$archive" "$archive_url"; then
-            rm -rf "$tmp_dir"
-            echo "${RED}ERROR: Failed to download LocalSend.${ALL_OFF}" >&2
-            return 1
-        fi
-
-        echo "Verifying LocalSend archive checksum..."
-        if ! printf '%s  %s\n' "$archive_sha256" "$archive" | sha256sum -c - >/dev/null 2>&1; then
-            rm -rf "$tmp_dir"
-            echo "${RED}ERROR: LocalSend checksum verification failed.${ALL_OFF}" >&2
-            return 1
-        fi
-
-        if ! mkdir -p "$extracted_dir" || ! tar -xzf "$archive" -C "$extracted_dir"; then
-            rm -rf "$tmp_dir"
-            echo "${RED}ERROR: Failed to extract LocalSend.${ALL_OFF}" >&2
-            return 1
-        fi
-
-        source_binary="$(find "$extracted_dir" -maxdepth 3 -type f -name 'localsend_app' -print -quit)"
-        if [[ -z "$source_binary" || ! -f "$source_binary" ]]; then
-            rm -rf "$tmp_dir"
-            echo "${RED}ERROR: The LocalSend executable was not found in the archive.${ALL_OFF}" >&2
-            return 1
-        fi
-
-        if ! chmod +x "$source_binary"; then
-            rm -rf "$tmp_dir"
-            echo "${RED}ERROR: Failed to mark the LocalSend executable as executable.${ALL_OFF}" >&2
-            return 1
-        fi
-
-        if ! install -d -m 0755 "$base_dir"; then
-            rm -rf "$tmp_dir"
-            echo "${RED}ERROR: Failed to create the LocalSend installation directory.${ALL_OFF}" >&2
-            return 1
-        fi
-
-        rm -rf "$install_dir"
-        if ! mv "$extracted_dir" "$install_dir"; then
-            rm -rf "$tmp_dir"
-            echo "${RED}ERROR: Failed to install LocalSend.${ALL_OFF}" >&2
-            return 1
-        fi
-
-        if ! printf '%s\n' "$version" > "$version_file"; then
-            rm -rf "$tmp_dir"
-            echo "${RED}ERROR: Failed to record the LocalSend version.${ALL_OFF}" >&2
-            return 1
-        fi
-
-        rm -rf "$tmp_dir"
-    fi
-
-    if ! ln -sfn "$install_dir" "$base_dir/current"; then
-        echo "${RED}ERROR: Failed to update the LocalSend launcher path.${ALL_OFF}" >&2
-        return 1
-    fi
-
-    if ! printf '%s\n' \
-        '[Desktop Entry]' \
-        'Version=1.0' \
-        'Type=Application' \
-        'Name=LocalSend' \
-        'Comment=Share files to nearby devices' \
-        'Exec=/opt/localsend/current/localsend_app' \
-        'Icon=network-transmit-receive' \
-        'Terminal=false' \
-        'Categories=Network;FileTransfer;Utility;' \
-        'StartupNotify=true' \
-        > /usr/share/applications/localsend.desktop; then
-        echo "${RED}ERROR: Failed to write the LocalSend desktop entry.${ALL_OFF}" >&2
-        return 1
-    fi
-
-    if ! chmod 0644 /usr/share/applications/localsend.desktop; then
-        echo "${RED}ERROR: Failed to set LocalSend desktop entry permissions.${ALL_OFF}" >&2
-        return 1
-    fi
-
-    if command -v update-desktop-database >/dev/null 2>&1; then
-        update-desktop-database /usr/share/applications || {
-            echo "${YELLOW}Warning: Failed to refresh the desktop application database.${ALL_OFF}"
-        }
-    fi
-
-    echo "LocalSend ${version} installed from the official, checksum-verified upstream archive."
-}
-
-if ! install_localsend; then
-    exit 1
-fi
 
 FISH_SHELL="$(command -v fish)"
 if ! grep -qxF "$FISH_SHELL" /etc/shells; then
@@ -816,12 +693,6 @@ else
     echo "${YELLOW}Warning: UFW is not active.${ALL_OFF}"
 fi
 
-if [[ -x "/opt/localsend/current/localsend_app" && -f "/usr/share/applications/localsend.desktop" ]]; then
-    echo "LocalSend: installed"
-else
-    echo "${YELLOW}Warning: LocalSend installation or desktop entry was not found.${ALL_OFF}"
-fi
-
 if [[ -f "/usr/local/share/fonts/JetBrainsMonoNerdFont/JetBrainsMonoNerdFont-Medium.ttf" ]]; then
     font_count="$(find /usr/local/share/fonts/JetBrainsMonoNerdFont -maxdepth 1 -type f -name '*.ttf' | wc -l)"
     if [[ "$font_count" == "1" ]]; then
@@ -836,7 +707,7 @@ fi
 for package in \
     hyprland-uwsm noctalia-hyprland-meta uwsm greetd ufw \
     fish foot neovim fastfetch nwg-look \
-    nautilus gvfs-mtp libayatana-appindicator-gtk3 \
+    nautilus gvfs-mtp \
     imv evince upower gpu-screen-recorder qt6ct mpv \
     wl-clip-persist starship; do
     if rpm -q "$package" >/dev/null 2>&1; then
