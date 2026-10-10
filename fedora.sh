@@ -254,7 +254,10 @@ install_localsend() {
     if [[ -x "$install_dir/localsend_app" && -f "$version_file" && "$(<"$version_file")" == "$version" ]]; then
         echo "LocalSend ${version} is already installed."
     else
-        tmp_dir="$(mktemp -d)"
+        if ! tmp_dir="$(mktemp -d)"; then
+            echo "${RED}ERROR: Failed to create a temporary directory for LocalSend.${ALL_OFF}" >&2
+            return 1
+        fi
         archive="$tmp_dir/LocalSend.tar.gz"
         extracted_dir="$tmp_dir/extracted"
 
@@ -318,19 +321,26 @@ install_localsend() {
         return 1
     fi
 
-    cat > /usr/share/applications/localsend.desktop <<EOF_LOCALSEND
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=LocalSend
-Comment=Share files to nearby devices
-Exec=/opt/localsend/current/localsend_app
-Icon=network-transmit-receive
-Terminal=false
-Categories=Network;FileTransfer;Utility;
-StartupNotify=true
-EOF_LOCALSEND
-    chmod 0644 /usr/share/applications/localsend.desktop
+    if ! printf '%s\n' \
+        '[Desktop Entry]' \
+        'Version=1.0' \
+        'Type=Application' \
+        'Name=LocalSend' \
+        'Comment=Share files to nearby devices' \
+        'Exec=/opt/localsend/current/localsend_app' \
+        'Icon=network-transmit-receive' \
+        'Terminal=false' \
+        'Categories=Network;FileTransfer;Utility;' \
+        'StartupNotify=true' \
+        > /usr/share/applications/localsend.desktop; then
+        echo "${RED}ERROR: Failed to write the LocalSend desktop entry.${ALL_OFF}" >&2
+        return 1
+    fi
+
+    if ! chmod 0644 /usr/share/applications/localsend.desktop; then
+        echo "${RED}ERROR: Failed to set LocalSend desktop entry permissions.${ALL_OFF}" >&2
+        return 1
+    fi
 
     if command -v update-desktop-database >/dev/null 2>&1; then
         update-desktop-database /usr/share/applications || {
