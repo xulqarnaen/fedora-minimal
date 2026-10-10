@@ -5,7 +5,9 @@ local webapp = programs.webapp
 -- Applications
 hl.bind("SUPER + Return", hl.dsp.exec_cmd(programs.terminal))
 hl.bind("SUPER + B", hl.dsp.exec_cmd(programs.browser))
-hl.bind("SUPER + E", hl.dsp.exec_cmd(programs.fileManager))
+hl.bind("SUPER + E", hl.dsp.exec_cmd(programs.fileManager .. " --new-window"))
+hl.bind("SUPER + SHIFT + T", hl.dsp.exec_cmd(programs.terminal .. " -e " .. programs.tasks))
+hl.bind("SUPER + M", hl.dsp.exec_cmd(programs.terminal .. " -e youtui"))
 
 -- Web Apps
 hl.bind("SUPER + A", hl.dsp.exec_cmd(webapp .. " https://chatgpt.com"))

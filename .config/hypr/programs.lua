@@ -8,4 +8,5 @@ return {
     browser = "brave-origin",
     noctalia = "noctalia msg ",
     webapp = "webapp",
+    tasks = "btop",
 }

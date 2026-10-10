@@ -154,6 +154,7 @@ enabled = [ "noctalia/screen_recorder" ]
     name = "official"
 
     [[plugins.source]]
+    enabled = false
     kind = "git"
     location = "https://github.com/noctalia-dev/community-plugins"
     name = "community"
@@ -225,7 +226,10 @@ directory = "~/Pictures/Wallpapers"
     path = "/home/ibr/Pictures/Wallpapers/wallhaven-8g8kmo_1920x1080.png"
 
     [[wallpaper.favorite]]
-    path = "/home/ibr/Pictures/Wallpapers/wallhaven-5ypg11_1920x1080.png"
+    community_palette = "Cyberpunk"
+    palette_source = "community"
+    path = "/home/ibr/Pictures/Wallpapers/wallhaven-8g8kmo_1920x1080.png"
+    theme_mode = "dark"
 
 [widget.active_window]
 capsule_fill = "tertiary"
