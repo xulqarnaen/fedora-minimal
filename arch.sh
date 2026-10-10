@@ -552,8 +552,7 @@ setup_nvim_desktop() {
     run_as_user sed -i \
         -e 's|^Exec=.*|Exec=xdg-terminal-exec nvim %F|' \
         -e 's|^Terminal=.*|Terminal=false|' \
-        -e '/^MimeType=/ { /text\\/markdown/! s|;*$|;text/markdown;|; }' \
-        -e '/^MimeType=/ { /application\\/json/! s|;*$|;application/json;|; }' \
+        -e '/^MimeType=/ s|;*$|;text/markdown;application/json;|' \
         "$desktop_file" || return 1
 
     if command -v update-desktop-database >/dev/null 2>&1; then
