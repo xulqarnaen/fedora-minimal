@@ -76,8 +76,11 @@ fi
 # 2. Interactive Prompts
 # ============================================================
 
-echo "This script will install the system packages and custom dot-files from this repository."
-echo "Use at your own risk."
+echo "This script will install the Fedora system packages,"
+echo "system configuration, and custom dot-files from this repository."
+echo ""
+echo "No backup files will be created. Existing targeted configuration files"
+echo "may be replaced by the configuration defined here."
 
 while true; do
     read -r -p "Would you like to proceed? (y/n): " proceed
@@ -156,6 +159,7 @@ PACKAGES=(
     dbus
     polkit
     accountsservice
+
     greetd
     noctalia-greeter-git
     noctalia-hyprland-meta
@@ -175,7 +179,6 @@ PACKAGES=(
     pipewire
     pipewire-pulseaudio
     pipewire-alsa
-    cava
 
     fish
     foot
@@ -184,32 +187,22 @@ PACKAGES=(
     nwg-look
     xdg-user-dirs
     xdg-utils
+    xdg-terminal-exec
 
     nautilus
-    tumbler
-
-    power-profiles-daemon
+    gvfs-mtp
 
     unrar
     unzip
     tar
 
-    ffmpegthumbnailer
-
-    gvfs-mtp
-
-    dosfstools
-    exfatprogs
-
-
     gum
     adw-gtk3-theme
     imv
     evince
-
     upower
-    gpu-screen-recorder
 
+    gpu-screen-recorder
     qt6ct
     mpv
     ffmpeg
@@ -217,9 +210,7 @@ PACKAGES=(
     brave-origin
 
     wl-clip-persist
-    ImageMagick
     starship
-
     curl
 )
 
@@ -448,36 +439,74 @@ install_jetbrains_mono_nerd_font() {
     echo "--- JetBrains Mono Nerd Font Setup ---"
 
     local font_version="v3.5.1"
+    local font_file="JetBrainsMonoNerdFont-Medium.ttf"
     local font_dir="/usr/local/share/fonts/JetBrainsMonoNerdFont"
     local version_file="$font_dir/.version"
+    local archive_sha256="04d5e8f903693f9dd13e16f867e994834e681eb3c72c0d337a770dcda09010cf"
+    local archive_url="https://github.com/ryanoasis/nerd-fonts/releases/download/${font_version}/JetBrainsMono.tar.xz"
     local tmp_dir
     local archive
+    local source_font
 
-    if [[ -f "$version_file" && "$(<"$version_file")" == "$font_version" ]]; then
-        echo "JetBrains Mono Nerd Font ${font_version} is already installed."
+    install -d -m 0755 "$font_dir"
+
+    if [[ -f "$font_dir/$font_file" && -f "$version_file" && "$(<"$version_file")" == "$font_version" ]]; then
+        echo "JetBrains Mono Nerd Font Medium ${font_version} is already installed."
         return 0
     fi
 
     tmp_dir="$(mktemp -d)"
     archive="$tmp_dir/JetBrainsMono.tar.xz"
 
-    if ! curl -fL --retry 3 --retry-delay 2 \
-        -o "$archive" \
-        "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/JetBrainsMono.tar.xz" \
-        || ! tar -xJf "$archive" -C "$tmp_dir" \
-        || ! install -d -m 0755 "$font_dir" \
-        || ! find "$tmp_dir" -type f -name 'JetBrainsMonoNerdFont-*.ttf' \
-            -exec install -m 0644 {} "$font_dir/" \; \
-        || ! fc-cache -f "$font_dir" >/dev/null 2>&1 \
-        || ! printf '%s\n' "$font_version" > "$version_file"; then
-
+    echo "Downloading JetBrains Mono Nerd Font ${font_version}..."
+    if ! curl -fL --retry 3 --retry-delay 2 -o "$archive" "$archive_url"; then
         rm -rf "$tmp_dir"
-        echo "${RED}ERROR: JetBrains Mono Nerd Font setup failed.${ALL_OFF}" >&2
+        echo "${RED}ERROR: Failed to download JetBrains Mono Nerd Font.${ALL_OFF}" >&2
+        return 1
+    fi
+
+    echo "Verifying font archive checksum..."
+    if ! printf '%s  %s\n' "$archive_sha256" "$archive" | sha256sum -c - >/dev/null 2>&1; then
+        rm -rf "$tmp_dir"
+        echo "${RED}ERROR: JetBrains Mono Nerd Font checksum verification failed.${ALL_OFF}" >&2
+        return 1
+    fi
+
+    if ! tar -xJf "$archive" -C "$tmp_dir"; then
+        rm -rf "$tmp_dir"
+        echo "${RED}ERROR: Failed to extract JetBrains Mono Nerd Font archive.${ALL_OFF}" >&2
+        return 1
+    fi
+
+    source_font="$(find "$tmp_dir" -type f -name "$font_file" -print -quit)"
+    if [[ -z "$source_font" || ! -f "$source_font" ]]; then
+        rm -rf "$tmp_dir"
+        echo "${RED}ERROR: $font_file was not found in the Nerd Fonts archive.${ALL_OFF}" >&2
+        return 1
+    fi
+
+    # Keep this dedicated directory minimal: exactly the selected font file.
+    find "$font_dir" -maxdepth 1 -type f -name 'JetBrainsMonoNerdFont*.ttf' -delete
+
+    if ! install -m 0644 "$source_font" "$font_dir/$font_file"; then
+        rm -rf "$tmp_dir"
+        echo "${RED}ERROR: Failed to install $font_file.${ALL_OFF}" >&2
+        return 1
+    fi
+
+    if ! printf '%s\n' "$font_version" > "$version_file"; then
+        rm -rf "$tmp_dir"
+        echo "${RED}ERROR: Failed to write font version marker.${ALL_OFF}" >&2
         return 1
     fi
 
     rm -rf "$tmp_dir"
-    echo "JetBrains Mono Nerd Font installed system-wide."
+
+    if ! fc-cache -f "$font_dir" >/dev/null 2>&1; then
+        echo "${YELLOW}Warning: fc-cache reported an error; the font was installed but the cache could not be refreshed.${ALL_OFF}"
+    fi
+
+    echo "Installed exactly one JetBrains Mono Nerd Font file: $font_file"
 }
 
 if ! install_jetbrains_mono_nerd_font; then
@@ -492,43 +521,75 @@ run_as_user() {
         HOME="$ACTUAL_USER_HOME" \
         USER="$ACTUAL_USER" \
         LOGNAME="$ACTUAL_USER" \
+        PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/bin" \
         "$@"
 }
 
 set_mime_defaults() {
     local desktop="$1"
     local pattern="$2"
-    local desktop_file="/usr/share/applications/$desktop"
+    local desktop_file="$ACTUAL_USER_HOME/.local/share/applications/$desktop"
     local mimes
 
+    [[ -f "$desktop_file" ]] || desktop_file="/usr/share/applications/$desktop"
     [[ -f "$desktop_file" ]] || return 1
     mimes="$(sed -n 's/^MimeType=//p' "$desktop_file" | tr ';' '\n' | grep -E "$pattern" || true)"
     [[ -n "$mimes" ]] || return 1
+
+    # Intentional unquoted expansion: mimes is newline-separated MIME types.
     run_as_user xdg-mime default "$desktop" $mimes
 }
 
-echo "Updating user directories and application defaults..."
+setup_nvim_desktop() {
+    local source="/usr/share/applications/nvim.desktop"
+    local applications="$ACTUAL_USER_HOME/.local/share/applications"
+    local desktop_file="$applications/nvim.desktop"
 
-if ! set_mime_defaults nvim.desktop '^(text/|application/x-shellscript$)'; then
-    echo "${RED}Warning: Failed to set Neovim as the default editor.${ALL_OFF}"
+    [[ -f "$source" ]] || return 1
+    run_as_user install -d -m 0755 "$applications" || return 1
+    run_as_user install -m 0644 "$source" "$desktop_file" || return 1
+    run_as_user sed -i \
+        -e 's|^Exec=.*|Exec=xdg-terminal-exec nvim %F|' \
+        -e 's|^Terminal=.*|Terminal=false|' \
+        -e '/^MimeType=/ s|;*$|;text/markdown;application/json;|' \
+        "$desktop_file" || return 1
+
+    if command -v update-desktop-database >/dev/null 2>&1; then
+        run_as_user update-desktop-database "$applications" || return 1
+    fi
+}
+
+if ! setup_nvim_desktop; then
+    echo "${YELLOW}Warning: Failed to configure Neovim to launch through the preferred terminal.${ALL_OFF}" >&2
+fi
+
+echo ""
+echo "--- Default Applications & User Directories ---"
+
+if ! set_mime_defaults nvim.desktop '^(text/|application/json$|application/x-shellscript$)'; then
+    echo "${YELLOW}Warning: Failed to set Neovim as the default editor.${ALL_OFF}"
 fi
 
 if ! set_mime_defaults imv-dir.desktop '^image/'; then
-    echo "${RED}Warning: Failed to set imv-dir as the default image viewer.${ALL_OFF}"
+    echo "${YELLOW}Warning: Failed to set imv as the default image viewer.${ALL_OFF}"
 fi
 
 if ! set_mime_defaults mpv.desktop '^(video/|audio/)'; then
-    echo "${RED}Warning: Failed to set mpv as the default audio/video player.${ALL_OFF}"
+    echo "${YELLOW}Warning: Failed to set mpv as the default audio/video player.${ALL_OFF}"
 fi
 
 if ! run_as_user xdg-mime default org.gnome.Evince.desktop application/pdf; then
-    echo "${RED}Warning: Failed to set Evince as the default PDF viewer.${ALL_OFF}"
+    echo "${YELLOW}Warning: Failed to set Evince as the default PDF viewer.${ALL_OFF}"
 fi
 
 if ! run_as_user xdg-mime default brave-origin.desktop \
-    text/html x-scheme-handler/http x-scheme-handler/https \
-    x-scheme-handler/about x-scheme-handler/unknown x-scheme-handler/chromium; then
-    echo "${RED}Warning: Failed to set Brave Origin as the default browser.${ALL_OFF}"
+    text/html \
+    x-scheme-handler/http \
+    x-scheme-handler/https \
+    x-scheme-handler/about \
+    x-scheme-handler/unknown \
+    x-scheme-handler/chromium; then
+    echo "${YELLOW}Warning: Failed to set Brave Origin as the default browser.${ALL_OFF}"
 fi
 
 XFCE_HELPERS="$CONFIG_DIR/xfce4/helpers.rc"
@@ -543,11 +604,11 @@ printf '%s\n' \
     'WebBrowser=brave-origin' >> "$XFCE_HELPERS"
 
 if ! run_as_user xdg-user-dirs-update; then
-    echo "${RED}Warning: Failed to update user directories.${ALL_OFF}"
+    echo "${YELLOW}Warning: Failed to update user directories.${ALL_OFF}"
 fi
 
 if ! run_as_user xdg-mime default org.gnome.Nautilus.desktop inode/directory; then
-    echo "${RED}Warning: Failed to set Nautilus as default for directories.${ALL_OFF}"
+    echo "${YELLOW}Warning: Failed to set Nautilus as default for directories.${ALL_OFF}"
 fi
 
 if ! run_as_user xdg-mime default org.gnome.Nautilus.desktop application/x-gnome-saved-search; then
@@ -573,7 +634,7 @@ file://$ACTUAL_USER_HOME/.config/hypr
 EOF
 
 # ============================================================
-# Final Ownership Fix
+# 14. Final Ownership & Permissions
 # ============================================================
 
 if ! chown -R \
@@ -586,7 +647,7 @@ if ! chown -R \
 fi
 
 # ============================================================
-# 7. Final Hyprland / Greetd Sanity Checks
+# 15. Final Sanity Checks
 # ============================================================
 
 echo ""
@@ -595,29 +656,71 @@ echo "--- Final Sanity Checks ---"
 if [[ -f "/usr/share/wayland-sessions/hyprland.desktop" ]]; then
     echo "Hyprland Wayland session: OK"
 else
-    echo "${RED}Warning: Hyprland Wayland session file was not found.${ALL_OFF}"
+    echo "${YELLOW}Warning: Hyprland Wayland session file was not found.${ALL_OFF}"
+fi
+
+if [[ -f "/usr/share/wayland-sessions/hyprland-uwsm.desktop" ]]; then
+    echo "Hyprland UWSM Wayland session: OK"
+else
+    echo "${YELLOW}Warning: Hyprland UWSM session file was not found.${ALL_OFF}"
 fi
 
 if command -v noctalia-greeter-session >/dev/null 2>&1; then
     echo "Noctalia Greeter session wrapper: OK"
 else
-    echo "${RED}Warning: noctalia-greeter-session was not found.${ALL_OFF}"
+    echo "${YELLOW}Warning: noctalia-greeter-session was not found.${ALL_OFF}"
 fi
 
-if systemctl is-enabled greetd >/dev/null 2>&1; then
+if systemctl is-enabled greetd.service >/dev/null 2>&1; then
     echo "greetd service: enabled"
 else
-    echo "${RED}Warning: greetd.service is not enabled.${ALL_OFF}"
+    echo "${YELLOW}Warning: greetd.service is not enabled.${ALL_OFF}"
 fi
 
-if systemctl is-enabled accounts-daemon >/dev/null 2>&1; then
+if systemctl is-enabled accounts-daemon.service >/dev/null 2>&1; then
     echo "AccountsService: enabled"
 else
-    echo "AccountsService: not enabled"
+    echo "${YELLOW}Warning: AccountsService is not enabled.${ALL_OFF}"
+fi
+
+if ufw status | grep -q 'Status: active'; then
+    echo "UFW: active"
+else
+    echo "${YELLOW}Warning: UFW is not active.${ALL_OFF}"
+fi
+
+if [[ -f "/usr/local/share/fonts/JetBrainsMonoNerdFont/JetBrainsMonoNerdFont-Medium.ttf" ]]; then
+    font_count="$(find /usr/local/share/fonts/JetBrainsMonoNerdFont -maxdepth 1 -type f -name '*.ttf' | wc -l)"
+    if [[ "$font_count" == "1" ]]; then
+        echo "JetBrains Mono Nerd Font: one TTF installed"
+    else
+        echo "${YELLOW}Warning: JetBrains Mono font directory contains $font_count TTF files.${ALL_OFF}"
+    fi
+else
+    echo "${YELLOW}Warning: JetBrains Mono Nerd Font file was not found.${ALL_OFF}"
+fi
+
+for package in \
+    hyprland-uwsm noctalia-hyprland-meta uwsm greetd ufw \
+    fish foot neovim fastfetch nwg-look \
+    nautilus gvfs-mtp \
+    imv evince upower gpu-screen-recorder qt6ct mpv \
+    wl-clip-persist starship; do
+    if rpm -q "$package" >/dev/null 2>&1; then
+        echo "Package $package: installed"
+    else
+        echo "${YELLOW}Warning: Expected package $package is not installed.${ALL_OFF}"
+    fi
+done
+
+if rpm -q noctalia-greeter-git >/dev/null 2>&1; then
+    echo "Greeter package noctalia-greeter-git: installed"
+else
+    echo "${YELLOW}Warning: Expected greeter package noctalia-greeter-git is not installed.${ALL_OFF}"
 fi
 
 echo ""
-echo "${GREEN}Installation Complete!${ALL_OFF}"
+echo "${GREEN}Installation Complete.${ALL_OFF}"
 
 # ============================================================
 # Reboot
