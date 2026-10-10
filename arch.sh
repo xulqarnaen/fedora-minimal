@@ -714,7 +714,7 @@ for package in \
     fish foot neovim fastfetch nwg-look \
     nautilus gvfs-mtp \
     imv evince upower gpu-screen-recorder qt6ct mpv \
-    wl-clip-persist starship wireless-regdb; do
+    wl-clip-persist starship; do
     if pacman -Q "$package" >/dev/null 2>&1; then
         echo "Package $package: installed"
     else
