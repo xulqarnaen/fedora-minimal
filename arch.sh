@@ -143,6 +143,7 @@ OFFICIAL_PACKAGES=(
     nwg-look
     xdg-user-dirs
     xdg-utils
+    xdg-terminal-exec
 
     nautilus
     gvfs-mtp
@@ -528,9 +529,10 @@ fi
 set_mime_defaults() {
     local desktop="$1"
     local pattern="$2"
-    local desktop_file="/usr/share/applications/$desktop"
+    local desktop_file="$ACTUAL_USER_HOME/.local/share/applications/$desktop"
     local mimes
 
+    [[ -f "$desktop_file" ]] || desktop_file="/usr/share/applications/$desktop"
     [[ -f "$desktop_file" ]] || return 1
     mimes="$(sed -n 's/^MimeType=//p' "$desktop_file" | tr ';' '\n' | grep -E "$pattern" || true)"
     [[ -n "$mimes" ]] || return 1
@@ -539,10 +541,34 @@ set_mime_defaults() {
     run_as_user xdg-mime default "$desktop" $mimes
 }
 
+setup_nvim_desktop() {
+    local source="/usr/share/applications/nvim.desktop"
+    local applications="$ACTUAL_USER_HOME/.local/share/applications"
+    local desktop_file="$applications/nvim.desktop"
+
+    [[ -f "$source" ]] || return 1
+    run_as_user install -d -m 0755 "$applications" || return 1
+    run_as_user install -m 0644 "$source" "$desktop_file" || return 1
+    run_as_user sed -i \
+        -e 's|^Exec=.*|Exec=xdg-terminal-exec nvim %F|' \
+        -e 's|^Terminal=.*|Terminal=false|' \
+        -e '/^MimeType=/ { /text\\/markdown/! s|;*$|;text/markdown;|; }' \
+        -e '/^MimeType=/ { /application\\/json/! s|;*$|;application/json;|; }' \
+        "$desktop_file" || return 1
+
+    if command -v update-desktop-database >/dev/null 2>&1; then
+        run_as_user update-desktop-database "$applications" || return 1
+    fi
+}
+
+if ! setup_nvim_desktop; then
+    echo "${YELLOW}Warning: Failed to configure Neovim to launch through the preferred terminal.${ALL_OFF}" >&2
+fi
+
 echo ""
 echo "--- Default Applications & User Directories ---"
 
-if ! set_mime_defaults nvim.desktop '^(text/|application/x-shellscript$)'; then
+if ! set_mime_defaults nvim.desktop '^(text/|application/json$|application/x-shellscript$)'; then
     echo "${YELLOW}Warning: Failed to set Neovim as the default editor.${ALL_OFF}"
 fi
 
