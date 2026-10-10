@@ -302,6 +302,11 @@ setup_noctalia_greeter() {
         return 1
     fi
 
+    if [[ ! -x "$setup_system_script" ]]; then
+        echo "${RED}ERROR: Noctalia Greeter system setup script was not found at $setup_system_script.${ALL_OFF}" >&2
+        return 1
+    fi
+
     echo "Using Noctalia Greeter session wrapper: $session_bin"
 
     if ! id -u "$greeter_user" >/dev/null 2>&1; then
@@ -358,16 +363,10 @@ EOF
 
     chmod 0644 "$greetd_config_file"
 
-    if [[ -x "$setup_system_script" ]]; then
-        echo "Running Noctalia Greeter system setup..."
-
-        if ! "$setup_system_script" >/dev/null 2>&1; then
-            echo "${RED}ERROR: Noctalia Greeter system setup failed.${ALL_OFF}" >&2
-            return 1
-        fi
-    else
-        echo "Warning: Noctalia Greeter system setup script was not found."
-        echo "The basic greetd configuration was still written."
+    echo "Running Noctalia Greeter system setup..."
+    if ! "$setup_system_script" >/dev/null 2>&1; then
+        echo "${RED}ERROR: Noctalia Greeter system setup failed.${ALL_OFF}" >&2
+        return 1
     fi
 }
 
